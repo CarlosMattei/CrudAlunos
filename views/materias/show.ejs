@@ -1,22 +1,24 @@
 <h1>Matéria</h1>
-<a href="/categorias/add" class="btn btn-success mb-3">Add Categoria</a>
+<a href="/materias/add" class="btn btn-success mb-3">Add materia</a>
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>ID</th>
             <th>Nome</th>
+            <th>Área</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-        <% categorias.forEach(categoria => { %>
+        <% materias.forEach(materia => { %>
         <tr>
-            <td><%= categoria.id %></td>
-            <td><%= categoria.nome %></td>
+            <td><%= materia.id %></td>
+            <td><%= materia.nome %></td>
+            <td><%= materia.area %></td>
             <td>
-                <a href="/categorias/edit/<%= categoria.id %>"
+                <a href="/materias/edit/<%= materia.id %>"
                     class="btn btn-primary btn-sm">Editar</a>
-                <form action="/categorias/delete/<%= categoria.id %>"
+                <form action="/materias/delete/<%= materia.id %>"
                     method="POST" class="d-inline">
                     <button type="submit"
                         class="btn btn-danger btn-sm">Delete</button>

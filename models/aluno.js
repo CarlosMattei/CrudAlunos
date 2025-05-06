@@ -1,25 +1,17 @@
 module.exports = (sequelize, DataTypes) => {
     const Aluno = sequelize.define('Aluno', {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
         nome: {
             type: DataTypes.STRING,
             allowNull: false
         }
-    }, {
-        tableName: 'aluno',
-        freezeTableName: true
     });
 
     Aluno.associate = (models) => {
-        Aluno.hasMany(models.cursos, {
-          foreignKey: "alunoId",
-          as: "curso",
+        Aluno.belongsTo(models.Curso, {  // Changed from models.cursos to models.Curso
+            foreignKey: "cursoId",     // Changed from cursoId to alunoId
+            as: "Curso",              // Changed from curso to cursos (plural makes more sense for hasMany)
         });
-      };
+    };
 
     return Aluno;
 };

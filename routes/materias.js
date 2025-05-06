@@ -3,55 +3,90 @@ const router = express.Router();
 const { Materia } = require("../models");
 
 
-// Listar materias
+// Listar Materias
 router.get("/",  async (req, res) => {
   const materias = await Materia.findAll();
   res.render("base", {
-    title: "Matérias",
+    title: "Materias",
     view: "materias/show",
     materias,
   });
 });
 
-// Formulário para adicionar materias
+// Formulário para adicionar Materia
 router.get("/add",  (req, res) => {
   res.render("base", {
-    title: "Add Materias",
+    title: "Add Materia",
     view: "materias/add",
   });
 });
 
-// Adicionar nova materia
-router.post("/add",  async (req, res) => {
-  await Materia.create({ nome: req.body.nome });
-  res.redirect("/materias");
+// Adicionar novo Materia
+router.post("/add", async (req, res) => {
+  try {
+    // Log para depuração
+    console.log("Corpo da requisição:", req.body);
+
+    // Capturar nome e area com valores padrão para evitar undefined
+    const nome = req.body.nome ? String(req.body.nome) : "";
+    const area = req.body.area ? String(req.body.area) : "";
+
+    // Validar campos obrigatórios
+    if (!nome || !area) {
+      return res.status(400).render("base", {
+        title: "Add Materia",
+        view: "materias/add",
+        error: "Nome e período são obrigatórios",
+      });
+    }
+    if (nome.trim() === "" || area.trim() === "") {
+      return res.status(400).render("base", {
+        title: "Add Materia",
+        view: "materias/add",
+        error: "Nome e período devem ser textos não vazios",
+      });
+    }
+
+    await Materia.create({
+      nome: nome.trim(),
+      area: area.trim(),
+    });
+    res.redirect("/materias");
+  } catch (error) {
+    console.error(error);
+    res.status(400).render("base", {
+      title: "Add Materia",
+      view: "materias/add",
+      error: error.message,
+    });
+  }
 });
 
-// Formulário para editar materias
+// Formulário para editar Materia
 router.get("/edit/:id",  async (req, res) => {
-  const materias = await Materia.findByPk(req.params.id);
+  const materia = await Materia.findByPk(req.params.id);
   res.render("base", {
-    title: "Editar Materias",
+    title: "Editar Materia",
     view: "materias/edit",
-    materias,
+    materia,
   });
 });
 
-// Atualizar materia
+// Atualizar Materia
 router.post("/edit/:id",  async (req, res) => {
   await Materia.update(
-    { nome: req.body.nome },
+    { nome: req.body.nome, area: req.body.area  },
     {
       where: { id: req.params.id },
     }
   );
-  res.redirect("/materia");
+  res.redirect("/materias");
 });
 
-// Deletar materia
+// Deletar Materia
 router.post("/delete/:id",  async (req, res) => {
-    await Materia.destroy({ where: { id: req.params.id } });
-    res.redirect("/materias");
-  });
+  await Materia.destroy({ where: { id: req.params.id } });
+  res.redirect("/materias");
+});
 
-  module.exports = router;
+module.exports = router;

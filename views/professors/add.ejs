@@ -1,0 +1,16 @@
+<h1>Add professor</h1>
+<form action="/professors/add" method="POST">
+    <div class="form-group">
+        <label for="nome">professor</label>
+        <input type="text" class="form-control" id="nome" name="nome" required>
+    </div>
+    <div class="form-group">
+        <label for="materia">materia</label>
+        <select class="form-control" id="materia" name="materiaId" required>
+            <% materias.forEach(materia => { %>
+            <option value="<%= materia.id %>"><%= materia.nome %></option>
+            <% }) %>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>

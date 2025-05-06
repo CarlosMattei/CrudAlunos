@@ -1,31 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const { Professor, Materias } = require("../models"); // Ajuste o caminho conforme necessário
+const { Professor, Materia } = require("../models"); // Ajuste o caminho conforme necessário
 
-// Mostrar todos os professores
-router.get("/", async (req, res) => {
+// Mostrar todos os pluno
+router.get("/",  async (req, res) => {
   try {
-    const professores = await Professor.findAll({
-      include: [{ model: Materias, as: "Materia" }],
+    const professors = await Professor.findAll({
+      include: [{ model: Materia, as: "Materia" }],
     });
+    
     res.render("base", {
-      title: "Professores",
-      view: "professores/show",
-      professores,
+      title: "Professor",
+      view: "professors/show",
+      professors,
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Erro ao recuperar professores");
+    res.status(500).send("Erro ao recuperar Professor");
   }
 });
 
-// Formulário para adicionar um novo professor
-router.get("/add", async (req, res) => {
+// Formulário para adicionar um novo produto
+router.get("/add",  async (req, res) => {
   try {
     const materias = await Materia.findAll();
     res.render("base", {
       title: "Add Professor",
-      view: "professores/add",
+      view: "professors/add",
       materias,
     });
   } catch (err) {
@@ -34,77 +35,81 @@ router.get("/add", async (req, res) => {
   }
 });
 
-// Adicionar um novo professor
+// Adicionar um novo produto
 router.post("/add", async (req, res) => {
   try {
-    const { nome, id } = req.body;
+    const { nome, materiaId } = req.body;
+    const materia = await Materia.findByPk(materiaId);
+    if (!materia) {
+      return res.status(400).send("materia não encontrado");
+    }
     await Professor.create({
       nome,
-      id,
+      materiaId,
     });
-    res.redirect("/professores");
+    res.redirect("/professors");
   } catch (err) {
     console.error(err);
-    res.status(500).send("Erro ao adicionar professor");
+    res.status(500).send("Erro ao adicionar Professor");
   }
 });
 
-// Formulário para editar um professor
-router.get("/edit/:id", async (req, res) => {
+// Formulário para editar um produto
+router.get("/edit/:id",  async (req, res) => {
   try {
     const { id } = req.params;
-    const professor = await Professor.findByPk(id, {
-      include: [{ model: Curso, as: "Curso" }],
+    const Professor = await Professor.findByPk(id, {
+      include: [{ model: materia, as: "materia" }],
     });
-    const cursos = await Curso.findAll();
-    if (professor) {
+    const materias = await materia.findAll();
+    if (Professor) {
       res.render("base", {
-        title: "Edit Professor",
-        view: "professores/edit",
-        professor,
-        cursos,
+        title: "Edit materia",
+        view: "professors/edit",
+        Professor,
+        materias,
       });
     } else {
-      res.status(404).send("Professor não encontrado");
+      res.status(404).send("Produto não encontrado");
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send("Erro ao recuperar professor");
+    res.status(500).send("Erro ao recuperar produto");
   }
 });
 
-// Atualizar um professor
-router.post("/edit/:id", async (req, res) => {
+// Atualizar um produto
+router.post("/edit/:id",  async (req, res) => {
   try {
     const { id } = req.params;
-    const { nome, matricula, cursoId } = req.body;
-    const professor = await Professor.findByPk(id);
-    if (professor) {
-      await professor.update({ nome, id });
-      res.redirect("/professores");
+    const { nome, materiaId } = req.body;
+    const Professor = await Professor.findByPk(id);
+    if (Professor) {
+      await Professor.update({ nome, materiaId });
+      res.redirect("/Professors");
     } else {
       res.status(404).send("Professor não encontrado");
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send("Erro ao atualizar o professor");
+    res.status(500).send("Erro ao atualizar o Professor");
   }
 });
 
-// Deletar um professor
-router.post("/delete/:id", async (req, res) => {
+// Deletar um produto
+router.post("/delete/:id",  async (req, res) => {
   try {
     const { id } = req.params;
-    const professor = await Professor.findByPk(id);
-    if (professor) {
-      await professor.destroy();
-      res.redirect("/professores");
+    const Professor = await Professor.findByPk(id);
+    if (Professor) {
+      await Professor.destroy();
+      res.redirect("/Professors");
     } else {
       res.status(404).send("Professor não encontrado");
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send("Erro ao excluir professor");
+    res.status(500).send("Erro ao excluir Professor");
   }
 });
 

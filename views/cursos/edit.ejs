@@ -3,7 +3,10 @@
     <div class="form-group">
         <label for="nome">Editar Cursos</label>
         <input type="text" class="form-control" id="nome" name="nome"
-            value="<%= cursos.nome %>" required>
+            value="<%= curso.nome %>" required>
+        <label for="periodo">Editar Periodo</label>
+        <input type="text" class="form-control" id="periodo" name="periodo"
+            value="<%= curso.periodo %>" required>
     </div>
     <button type="submit" class="btn btn-primary">Atualizar</button>
 </form>

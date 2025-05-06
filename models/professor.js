@@ -1,25 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
-    const Professor = sequelize.define("Professor", {
+    const Professor = sequelize.define('Professor', {
         id: {
             type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         nome: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        },
-    }, {
-        tableName: 'professor',
-        freezeTableName: true
+            type: DataTypes.STRING,
+            allowNull: false
+        }
     });
 
     Professor.associate = (models) => {
-        Professor.hasMany(models.materia, {
-          foreignKey: "id",
-          as: "materia",
+        Professor.belongsTo(models.Materia, {
+            foreignKey: "materiaId",
+            as: "Materia",
         });
-      };
+    };
 
     return Professor;
-}
+};

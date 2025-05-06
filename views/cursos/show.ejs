@@ -5,18 +5,20 @@
         <tr>
             <th>ID</th>
             <th>Nome</th>
+            <th>Periodo</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody>
         <% cursos.forEach(cursos => { %>
         <tr>
-            <td><%= cursos.cursoId %></td>
+            <td><%= cursos.id %></td>
             <td><%= cursos.nome %></td>
+            <td><%= cursos.periodo %></td>
             <td>
-                <a href="/cursos/edit/<%= cursos.cursoId %>"
+                <a href="/cursos/edit/<%= cursos.id %>"
                     class="btn btn-primary btn-sm">Editar</a>
-                <form action="/cursos/delete/<%= cursos.cursoId %>"
+                <form action="/cursos/delete/<%= cursos.id %>"
                     method="POST" class="d-inline">
                     <button type="submit"
                         class="btn btn-danger btn-sm">Delete</button>
